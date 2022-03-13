@@ -1,21 +1,21 @@
 apiVersion: apps/v1 
 kind: Deployment 
 metadata: 
-  name: app 
+  name: maven-app 
 spec: 
   replicas: 2 
   selector: 
     matchLabels: 
-      app: springapp 
+      app: maven-app 
   template: 
     metadata: 
-      name: springapppod 
+      name: maven-web-app 
       labels: 
-        app: springapp 
+        app: maven-app 
     spec: 
       containers: 
-      - name: springappcontainer 
-        image: mylandmarktech/spring-boot-mongo 
+      - name: mavenappcontainer 
+        image: frankystar1/maven-web-app:1
         ports: 
         - containerPort: 8080 
         env: 
@@ -29,66 +29,12 @@ spec:
 apiVersion: v1 
 kind: Service 
 metadata: 
-  name: springapp 
+  name: mavensvc 
 spec: 
   selector: 
-    app: springapp 
+    app: maven-app 
   ports: 
   - port: 80 
     targetPort: 8080 
   type: LoadBalancer 
---- 
-apiVersion: v1 
-kind: PersistentVolumeClaim 
-metadata: 
-  name: mongodbpvc  
-spec: 
-  accessModes: 
-    - ReadWriteOnce 
-  resources: 
-    requests: 
-      storage: 1Gi 
---- 
-apiVersion: apps/v1 
-kind: ReplicaSet 
-metadata: 
-  name: mongodbrs 
-spec: 
-  selector: 
-    matchLabels: 
-      app: mongodb 
-  template: 
-     metadata: 
-       name: mongodbpod 
-       labels: 
-         app: mongodb 
-     spec: 
-       volumes: 
-       - name: pvc 
-         persistentVolumeClaim: 
-           claimName: mongodbpvc      
-       containers: 
-       - name: mongodbcontainer 
-         image: mongo 
-         ports: 
-         - containerPort: 27017 
-         env: 
-         - name: MONGO_INITDB_ROOT_USERNAME 
-           value: devdb 
-         - name: MONGO_INITDB_ROOT_PASSWORD 
-           value: devdb@123 
-         volumeMounts: 
-         - name: pvc 
-           mountPath: /data/db    
---- 
-apiVersion: v1 
-kind: Service 
-metadata: 
-  name: mongo 
-spec: 
-  type: ClusterIP 
-  selector: 
-    app: mongodb 
-  ports: 
-  - port: 27017 
-    targetPort: 27017 
+
