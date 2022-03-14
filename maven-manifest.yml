@@ -15,7 +15,7 @@ spec:
     spec: 
       containers: 
       - name: mavenappcontainer 
-        image: frankystar1/maven-web-app:2
+        image: frankystar1/maven-web-app:3
         ports: 
         - containerPort: 8080  
 --- 
